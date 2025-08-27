@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Courses</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="public/styles.css">
+    <style>
+        /* Define variables like in dashboard.ejs */
+        :root {
+            --primary: #4361ee;
+            --primary-light: #6988ff;
+            --primary-dark: #3a56d4;
+            --secondary: #2b2d42;
+            --secondary-light: #444a6e;
+            --light-bg: #f8f9fa;
+            --text: #2b2d42;
+            --text-light: #6c757d;
+            --border: #e0e0e0;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            --accent: #fb6f92;
+            --success: #4cd964;
+        }
+        
+        /* Modern UI styling with transitions and animations */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            background-image: 
+                radial-gradient(#4361ee15 1px, transparent 1px), 
+                radial-gradient(#4361ee15 1px, var(--light-bg) 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Particle animation from dashboard.ejs */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.2);
+            pointer-events: none;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 20%;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 2.5rem;
+            color: var(--secondary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 2px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+            position: relative;
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        .btn:hover i {
+            transform: rotate(360deg);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .course-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .course-card {
+            width: 320px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 0;
+            text-align: center;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+            animation-delay: calc(0.1s * var(--i, 1));
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .course-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 0;
+            transition: transform 0.5s ease;
+        }
+
+        .course-card:hover .course-thumbnail {
+            transform: scale(1.05);
+        }
+
+        .course-content {
+            padding: 20px;
+        }
+
+        .course-card h3 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: var(--secondary);
+            transition: color 0.3s ease;
+        }
+
+        .course-card:hover h3 {
+            color: var(--primary);
+        }
+
+        .course-card p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .teacher-info {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .teacher-info::before {
+            content: '👨‍🏫';
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        .enroll-button {
+            background: linear-gradient(45deg, #1abc9c, #16a085);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 80%;
+            margin: 0 auto;
+            display: block;
+            box-shadow: 0 4px 10px rgba(22, 160, 133, 0.3);
+        }
+
+        .enroll-button:hover {
+            background: linear-gradient(45deg, #16a085, #1abc9c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(22, 160, 133, 0.4);
+        }
+
+        /* Navbar styles from dashboard.ejs */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary-light);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-light);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-3px) rotate(5deg);
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .nav-link.active:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Animation delays for cards */
+        .course-card:nth-child(1) { --i: 1; }
+        .course-card:nth-child(2) { --i: 2; }
+        .course-card:nth-child(3) { --i: 3; }
+        .course-card:nth-child(4) { --i: 4; }
+        .course-card:nth-child(5) { --i: 5; }
+        .course-card:nth-child(6) { --i: 6; }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-link span {
+                display: none;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .course-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Animation -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Navbar from dashboard.ejs -->
+    <div class="navbar">
+        <div class="container">
+            <a href="/dashboard" class="logo"><i class="fas fa-graduation-cap"></i> LearnHub</a>
+            <div class="nav-left">
+                <a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+                <a href="/courses" class="nav-link active"><i class="fas fa-book"></i> <span>Courses</span></a>
+                <a href="/my-courses" class="nav-link"><i class="fas fa-user-graduate"></i> <span>My Learning</span></a>
+            </div>
+            <div class="nav-right">
+                <a href="/profile" class="nav-link"><i class="fas fa-user-circle"></i> <span>Profile</span></a>
+                <a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Available Courses</h1>
+
+        <% if (user.role === 'teacher') { %>
+            <a href="/courses/new" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Course</a>
+        <% } %>
+
+        <div class="course-list">
+            <% courses.forEach((course, index) => { %>
+                <div class="course-card" style="--i: <%= index + 1 %>">
+                    <% if (course.thumbnail) { %>
+                        <img src="<%= course.thumbnail %>" alt="Course Thumbnail" class="course-thumbnail">
+                    <% } else { %>
+                        <div class="course-thumbnail" style="background: linear-gradient(45deg, #e0e0e0, #f5f5f5); display: flex; align-items: center; justify-content: center;">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                    <% } %>
+                    <div class="course-content">
+                        <h3><%= course.title %></h3>
+                        <p><%= course.description %></p>
+                        <p class="teacher-info"><%= course.teacher.name %></p>
+                        
+                        <% if (user.role === 'student') { %>
+                            <form action="/courses/enroll/<%= course._id %>" method="POST">
+                                <button type="submit" class="enroll-button">Enroll Now</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+        <a href="/dashboard" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Create particles
+            function createParticles() {
+                const container = document.getElementById('particles');
+                const particleCount = 30;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Random size between 10px and 40px
+                    const size = Math.random() * 30 + 10;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Random position
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    
+                    // Random animation duration between 15s and 40s
+                    const duration = Math.random() * 25 + 15;
+                    particle.style.animationDuration = `${duration}s`;
+                    
+                    // Random animation delay
+                    const delay = Math.random() * 10;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    container.appendChild(particle);
+                }
+            }
+            
+            // Initialize particles
+            createParticles();
+            
+            // Add hover effect to course cards
+            $('.course-card').hover(
+                function() {
+                    $(this).addClass('animate__animated animate__pulse');
+                },
+                function() {
+                    $(this).removeClass('animate__animated animate__pulse');
+                }
+            );
+        });
+    </script>
+</body>
+</html>

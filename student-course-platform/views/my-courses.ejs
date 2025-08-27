@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Courses</title>
+    <link rel="stylesheet" href="/public/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="/public/shared-styles.css">
+    <style>
+        /* Modern UI styling with enhanced visuals and animations */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-attachment: fixed;
+            color: #333;
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: 30px auto;
+            padding: 30px;
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 2px;
+        }
+
+        .course-section {
+            margin-bottom: 60px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-section-header {
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(238, 238, 238, 0.7);
+            padding-bottom: 15px;
+        }
+
+        .course-section-header h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin: 0;
+            position: relative;
+            display: inline-block;
+        }
+
+        .course-section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 2px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .course-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            background-color: white;
+            position: relative;
+            opacity: 0;
+            animation: fadeInCard 0.5s ease forwards;
+            animation-delay: calc(0.1s * var(--i, 1));
+        }
+
+        @keyframes fadeInCard {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: none;
+            transition: transform 0.5s ease;
+        }
+
+        .course-card:hover .course-thumbnail {
+            transform: scale(1.05);
+        }
+
+        .course-thumbnail.placeholder {
+            background: linear-gradient(45deg, #f0f0f0, #f9f9f9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .course-info {
+            padding: 20px;
+        }
+
+        .course-title {
+            margin: 0 0 15px;
+            font-size: 1.3rem;
+            color: #34495e;
+            transition: color 0.3s ease;
+        }
+
+        .course-card:hover .course-title {
+            color: #3498db;
+        }
+
+        .course-teacher {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .course-teacher::before {
+            content: '👨‍🏫';
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .course-description {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .course-actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 30px;
+            margin: 5px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #1abc9c, #16a085);
+            box-shadow: 0 4px 15px rgba(22, 160, 133, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #16a085, #1abc9c);
+            box-shadow: 0 6px 20px rgba(22, 160, 133, 0.3);
+        }
+
+        .empty-message {
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            animation: pulse 2s infinite;
+        }
+
+        /* Navbar styles */
+.navbar {
+    background: linear-gradient(135deg, #2b2d42 0%, #444a6e 100%);
+    padding: 15px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.logo i {
+    margin-right: 10px;
+    color: #6988ff;
+    animation: pulse 2s infinite;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    margin: 0 5px;
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #6988ff;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link i {
+    margin-right: 8px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nav-link:hover i {
+    transform: translateY(-3px) rotate(5deg);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    background: #4361ee;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+}
+
+.nav-link.active:hover {
+    background: #3a56d4;
+}
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+            50% {
+                box-shadow: 0 5px 25px rgba(52, 152, 219, 0.2);
+            }
+            100% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+        }
+
+        .empty-message p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Animation delays for cards */
+        .course-card:nth-child(1) { --i: 1; }
+        .course-card:nth-child(2) { --i: 2; }
+        .course-card:nth-child(3) { --i: 3; }
+        .course-card:nth-child(4) { --i: 4; }
+        .course-card:nth-child(5) { --i: 5; }
+        .course-card:nth-child(6) { --i: 6; }
+
+        /* Add a subtle hover effect on the placeholder */
+        .course-thumbnail.placeholder:hover {
+            background: linear-gradient(45deg, #e8f4fc, #f9f9f9);
+        }
+
+        /* Add a subtle decoration to the placeholder */
+        .course-thumbnail.placeholder::after {
+            content: '📚';
+            font-size: 40px;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+    <%- include('shared-navbar') %>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>My Courses</h1>
+        </div>
+
+        <% if (user.role === 'teacher') { %>
+        <div class="course-section">
+            <div class="course-section-header">
+                <h2>Courses I'm Teaching</h2>
+            </div>
+            
+            <% if (teachingCourses && teachingCourses.length > 0) { %>
+                <div class="course-grid">
+                    <% teachingCourses.forEach((course, index) => { %>
+                        <div class="course-card" style="--i: <%= index + 1 %>">
+                            <% if (course.thumbnail) { %>
+                                <img src="<%= course.thumbnail %>" alt="<%= course.title %>" class="course-thumbnail">
+                            <% } else { %>
+                                <div class="course-thumbnail placeholder"></div>
+                            <% } %>
+                            <div class="course-info">
+                                <h3 class="course-title"><%= course.title %></h3>
+                                <p class="course-description"><%= course.description %></p>
+                                <div class="course-actions">
+                                    <a href="/courses/<%= course._id %>" class="btn">View Course</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="empty-message">
+                    <p>You're not teaching any courses yet.</p>
+                    <a href="/courses/new" class="btn btn-primary">Create a Course</a>
+                </div>
+            <% } %>
+        </div>
+        <% } %>
+
+        <div class="course-section">
+            <div class="course-section-header">
+                <h2>Courses I'm Enrolled In</h2>
+            </div>
+            
+            <% if (enrolledCourses && enrolledCourses.length > 0) { %>
+                <div class="course-grid">
+                    <% enrolledCourses.forEach((course, index) => { %>
+                        <div class="course-card" style="--i: <%= index + 1 %>">
+                            <% if (course.thumbnail) { %>
+                                <img src="<%= course.thumbnail %>" alt="<%= course.title %>" class="course-thumbnail">
+                            <% } else { %>
+                                <div class="course-thumbnail placeholder"></div>
+                            <% } %>
+                            <div class="course-info">
+                                <h3 class="course-title"><%= course.title %></h3>
+                                <p class="course-teacher">Taught by: <%= course.teacher.name || 'Unknown Teacher' %></p>
+                                <p class="course-description"><%= course.description %></p>
+                                <div class="course-actions">
+                                    <a href="/courses/<%= course._id %>" class="btn btn-primary">Continue Learning</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="empty-message">
+                    <p>You're not enrolled in any courses yet.</p>
+                    <a href="/courses" class="btn btn-primary">Browse Courses</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

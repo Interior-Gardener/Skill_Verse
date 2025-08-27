@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #6988ff;
+            --primary-dark: #3a56d4;
+            --secondary: #2b2d42;
+            --secondary-light: #444a6e;
+            --light-bg: #f8f9fa;
+            --text: #2b2d42;
+            --text-light: #6c757d;
+            --border: #e0e0e0;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            --accent: #fb6f92;
+            --success: #4cd964;
+            --primary-color: #4a6cf7;
+            --secondary-color: #f5f9fc;
+            --text-color: #333;
+            --transition-speed: 0.4s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Navbar styles from dashboard */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+            position: relative;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary-light);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-light);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-3px) rotate(5deg);
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .nav-link.active:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Profile Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+        }
+        
+        .profile-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        
+        .profile-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 20%;
+            transform: scaleX(0);
+            transition: transform 0.5s;
+        }
+        
+        .profile-container:hover h1::after {
+            transform: scaleX(1);
+        }
+        
+        .profile-image-container {
+            position: relative;
+            margin: 30px auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform var(--transition-speed);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        
+        .profile-image-container:hover {
+            transform: scale(1.05);
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter var(--transition-speed);
+        }
+        
+        .profile-image:hover {
+            filter: brightness(1.1);
+        }
+        
+        .info-item {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--secondary-color);
+            transition: transform var(--transition-speed), background-color var(--transition-speed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .info-item:hover {
+            transform: translateX(5px);
+            background-color: #e6eef5;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .info-value {
+            font-weight: normal;
+        }
+        
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(74, 108, 247, 0.4);
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 108, 247, 0.6);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .course-count {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: center;
+            margin-left: 8px;
+        }
+        
+        /* Loading animation for page transition */
+        .page-transition {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-link span {
+                display: none;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="container">
+            <a href="/dashboard" class="logo"><i class="fas fa-graduation-cap"></i> LearnHub</a>
+            <div class="nav-left">
+                <a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+                <a href="/courses" class="nav-link"><i class="fas fa-book"></i> <span>Courses</span></a>
+                <a href="/my-courses" class="nav-link"><i class="fas fa-user-graduate"></i> <span>My Learning</span></a>
+            </div>
+            <div class="nav-right">
+                <a href="/profile" class="nav-link active"><i class="fas fa-user-circle"></i> <span>Profile</span></a>
+                <a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="profile-container page-transition">
+            <h1>My Profile</h1>
+            
+            <div class="profile-image-container">
+                <% if (user.profilePicture) { %>
+                    <img class="profile-image" src="<%= user.profilePicture %>" alt="Profile Picture">
+                <% } else { %>
+                    <%= user.name.charAt(0).toUpperCase() %>
+                <% } %>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Name:</span>
+                <span class="info-value"><%= user.name %></span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value"><%= user.email %></span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Role:</span>
+                <span class="info-value"><%= user.role %></span>
+            </div>
+            
+            <% if (user.role === 'student') { %>
+                <div class="info-item">
+                    <span class="info-label">Courses Enrolled:</span>
+                    <span class="info-value"><%= enrolledCourses ? enrolledCourses.length : 0 %></span>
+                </div>
+            <% } else if (user.role === 'teacher') { %>
+                <div class="info-item">
+                    <span class="info-label">Courses Teaching:</span>
+                    <span class="info-value"><%= teachingCourses ? teachingCourses.length : 0 %></span>
+                </div>
+            <% } %>
+            
+            <a href="/dashboard" class="btn">Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Add event listener for page transition when navigating away
+        document.querySelector('.btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const container = document.querySelector('.profile-container');
+            container.style.opacity = 0;
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(function() {
+                window.location.href = '/dashboard';
+            }, 400);
+        });
+        
+        // Ensure elements fade in on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.info-item');
+            items.forEach((item, index) => {
+                item.style.opacity = 0;
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.4s ease';
+                    item.style.opacity = 1;
+                }, 100 + (index * 150));
+            });
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

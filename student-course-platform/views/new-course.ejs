@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Course</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/public/styles.css">
+    <link rel="stylesheet" href="/public/shared-styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-attachment: fixed;
+            color: #333;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background: linear-gradient(135deg, #2b2d42 0%, #444a6e 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 85%;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6988ff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #6988ff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-link:hover i {
+            transform: translateY(-3px) rotate(5deg);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: #4361ee;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .nav-link.active:hover {
+            background: #3a56d4;
+        }
+
+        /* Page specific styles */
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .form-container {
+            width: 70%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        .form-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 2px;
+        }
+
+        .file-preview {
+            margin-top: 10px;
+        }
+
+        .thumbnail-preview {
+            max-width: 100%;
+            max-height: 200px;
+            display: none;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .file-list {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .file-list ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .file-list li {
+            margin-bottom: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .help-text {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 30px;
+            margin: 15px 0;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #1abc9c, #16a085);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #16a085, #1abc9c);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-left">
+                <a href="/" class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    EduPortal
+                </a>
+            </div>
+            <div class="nav-right">
+                <a href="/dashboard" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+                <a href="/courses" class="nav-link active">
+                    <i class="fas fa-book"></i>
+                    Courses
+                </a>
+                <a href="/profile" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a href="/logout" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Create New Course</h1>
+            </div>
+            
+            <form action="/courses" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Course Title:</label>
+                    <input type="text" id="title" name="title" required />
+                    <p class="help-text">Choose a clear, descriptive title for your course</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Course Description:</label>
+                    <textarea id="description" name="description" rows="6" required></textarea>
+                    <p class="help-text">Describe what students will learn in this course</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="thumbnail">Course Thumbnail:</label>
+                    <input type="file" id="thumbnail" name="thumbnail" accept="image/jpeg, image/png, image/gif" />
+                    <p class="help-text">Recommended size: 1280×720px (16:9)</p>
+                    <img id="thumbnailPreview" class="thumbnail-preview" src="#" alt="Thumbnail preview" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="materials">Upload Course Materials (PDFs, Docs, etc.):</label>
+                    <input type="file" id="materials" name="materials" accept=".pdf,.doc,.docx,.pptx" multiple />
+                    <p class="help-text">You can add more materials later</p>
+                    <div id="materialsList" class="file-list"></div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="/my-courses" class="btn">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Thumbnail preview
+        document.getElementById("thumbnail").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const thumbnailPreview = document.getElementById("thumbnailPreview");
+
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                thumbnailPreview.src = fileURL;
+                thumbnailPreview.style.display = "block";
+            } else {
+                thumbnailPreview.style.display = "none";
+            }
+        });
+
+        // Materials list preview
+        document.getElementById("materials").addEventListener("change", function(event) {
+            const files = event.target.files;
+            const materialsList = document.getElementById("materialsList");
+            
+            materialsList.innerHTML = "";
+            
+            if (files.length > 0) {
+                const fileListTitle = document.createElement("p");
+                fileListTitle.textContent = "Selected files:";
+                materialsList.appendChild(fileListTitle);
+                
+                const list = document.createElement("ul");
+                
+                for (let i = 0; i < files.length; i++) {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = files[i].name;
+                    list.appendChild(listItem);
+                }
+                
+                materialsList.appendChild(list);
+            }
+        });
+    </script>
+</body>
+</html>

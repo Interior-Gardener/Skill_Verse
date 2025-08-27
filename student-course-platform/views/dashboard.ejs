@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LearnHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #6988ff;
+            --primary-dark: #3a56d4;
+            --secondary: #2b2d42;
+            --secondary-light: #444a6e;
+            --light-bg: #f8f9fa;
+            --text: #2b2d42;
+            --text-light: #6c757d;
+            --border: #e0e0e0;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            --accent: #fb6f92;
+            --success: #4cd964;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', 'Arial', sans-serif;
+            background-color: var(--light-bg);
+            background-image: 
+                radial-gradient(#4361ee15 1px, transparent 1px), 
+                radial-gradient(#4361ee15 1px, var(--light-bg) 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Particle animation */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.2);
+            pointer-events: none;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 20%;
+            }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+            position: relative;
+        }
+        
+        /* Navbar styles with enhanced animations */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary-light);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-light);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-3px) rotate(5deg);
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .nav-link.active:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Header styles with enhanced animations */
+        .header {
+            text-align: center;
+            margin: 40px 0;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            animation: fadeInDown 0.8s ease;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .header p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        /* Course section styles with enhanced animations */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            animation: fadeInLeft 0.8s ease;
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .section-header h2 {
+            color: var(--secondary);
+            font-weight: 600;
+            position: relative;
+            padding-left: 15px;
+            font-size: 1.6rem;
+        }
+        
+        .section-header h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 70%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+            border-radius: 5px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        .btn:hover i {
+            transform: rotate(360deg);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        /* Course list styles with enhanced animations */
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transform-origin: center;
+            animation: fadeIn 0.8s ease-out;
+            animation-fill-mode: both;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(255, 255, 255, 0) 50%);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .course-card:hover::before {
+            opacity: 1;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .course-list .course-card:nth-child(1) { animation-delay: 0.1s; }
+        .course-list .course-card:nth-child(2) { animation-delay: 0.2s; }
+        .course-list .course-card:nth-child(3) { animation-delay: 0.3s; }
+        .course-list .course-card:nth-child(4) { animation-delay: 0.4s; }
+        .course-list .course-card:nth-child(5) { animation-delay: 0.5s; }
+        .course-list .course-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--card-hover-shadow);
+            z-index: 10;
+        }
+        
+        .course-thumbnail {
+            height: 180px;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .course-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.15));
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .course-card:hover .course-thumbnail::after {
+            opacity: 0.8;
+        }
+        
+        .course-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .course-card:hover .course-thumbnail img {
+            transform: scale(1.08) rotate(1deg);
+        }
+        
+        .course-thumbnail i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            color: rgba(203, 213, 224, 0.7);
+            z-index: 2;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .course-card:hover .course-thumbnail i {
+            color: var(--primary-light);
+            transform: translate(-50%, -50%) scale(1.2) rotate(15deg);
+        }
+        
+        .course-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .course-title {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--secondary);
+            font-weight: 600;
+            transition: color 0.3s ease;
+            line-height: 1.4;
+        }
+        
+        .course-card:hover .course-title {
+            color: var(--primary);
+        }
+        
+        .course-description {
+            color: var(--text-light);
+            margin-bottom: 18px;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            flex-wrap: wrap;
+        }
+        
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .course-card:hover .course-meta span {
+            transform: translateY(-2px);
+        }
+        
+        .course-meta span i {
+            margin-right: 5px;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .course-action {
+            text-align: center;
+        }
+        
+        .course-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.2);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .course-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .course-btn:hover::before {
+            left: 100%;
+        }
+        
+        .course-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        /* Empty state styles with enhanced animations */
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 50px;
+            animation: fadeInUp 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .empty-state i {
+            font-size: 80px;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: block;
+            animation: bounce 3s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-25px); }
+            60% { transform: translateY(-15px); }
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-size: 1.7rem;
+        }
+        
+        .empty-state p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.05rem;
+        }
+        
+        /* Progress indicator for courses */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s infinite linear;
+        }
+        
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Course status indicator */
+        .course-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            z-index: 10;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .course-status.new {
+            background-color: var(--accent);
+        }
+        
+        .course-status.completed {
+            background-color: var(--success);
+        }
+        
+        .course-card:hover .course-status {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Floating cards effect on scroll */
+        .floating-card {
+            transition: transform 0.3s ease-out;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-link span {
+                display: none;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .course-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Animation -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="container">
+            <a href="/dashboard" class="logo"><i class="fas fa-graduation-cap"></i> LearnHub</a>
+            <div class="nav-left">
+                <a href="/dashboard" class="nav-link active"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+                <a href="/courses" class="nav-link"><i class="fas fa-book"></i> <span>Courses</span></a>
+                <a href="/my-courses" class="nav-link"><i class="fas fa-user-graduate"></i> <span>My Learning</span></a>
+            </div>
+            <div class="nav-right">
+                <a href="/profile" class="nav-link"><i class="fas fa-user-circle"></i> <span>Profile</span></a>
+                <a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="header">
+            <h1>Welcome, <%= user.name %></h1>
+            <p>Your personalized learning dashboard</p>
+        </div>
+        
+        <!-- Student Section -->
+        <% if (user.role === 'student') { %>
+            <div class="section-header">
+                <h2>My Enrolled Courses</h2>
+                <a href="/courses" class="btn btn-primary"><i class="fas fa-plus"></i> Find New Courses</a>
+            </div>
+            
+            <% if (Array.isArray(enrolledCourses) && enrolledCourses.length > 0) { %>
+                <div class="course-list">
+                    <% enrolledCourses.forEach(function(course, index) { %>
+                        <div class="course-card floating-card" data-float="<%= index % 3 %>">
+                            <% 
+                            // Mock progress calculation - in real app this would be from actual progress data
+                            const progress = Math.floor(Math.random() * 100); 
+                            let statusClass = '';
+                            let statusText = '';
+                            
+                            if (progress === 100) {
+                                statusClass = 'completed';
+                                statusText = 'Completed';
+                            } else if (progress < 20) {
+                                statusClass = 'new';
+                                statusText = 'Just Started';
+                            } else {
+                                statusClass = '';
+                                statusText = 'In Progress';
+                            }
+                            %>
+                            
+                            <div class="course-status <%= statusClass %>"><%= statusText %></div>
+                            <div class="course-thumbnail">
+                                <% if (course.thumbnail) { %>
+                                    <img src="<%= course.thumbnail %>" alt="<%= course.title %>" />
+                                <% } else { %>
+                                    <i class="fas fa-book-open"></i>
+                                <% } %>
+                            </div>
+                            <div class="course-content">
+                                <h3 class="course-title"><%= course.title || 'Untitled Course' %></h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: <%= progress %>%"></div>
+                                </div>
+                                <p class="course-description">
+                                    <%= course.description ? (course.description.length > 80 ? course.description.substring(0, 80) + '...' : course.description) : 'No description available' %>
+                                </p>
+                                <div class="course-action">
+                                    <a href="/courses/<%= course._id %>" class="course-btn">Continue Learning</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <i class="fas fa-book-reader"></i>
+                    <h3>No enrolled courses yet</h3>
+                    <p>Explore our course catalog to discover new learning opportunities that match your interests.</p>
+                    <a href="/courses" class="btn btn-primary">Browse Courses</a>
+                </div>
+            <% } %>
+        <% } %>
+        
+        <!-- Teacher Section -->
+        <% if (user.role === 'teacher') { %>
+            <div class="section-header">
+                <h2>My Teaching</h2>
+                <a href="/courses/new" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Course</a>
+            </div>
+            
+            <% if (Array.isArray(teachingCourses) && teachingCourses.length > 0) { %>
+                <div class="course-list">
+                    <% teachingCourses.forEach(function(course, index) { %>
+                        <div class="course-card floating-card" data-float="<%= index % 3 %>">
+                            <div class="course-thumbnail">
+                                <% if (course.thumbnail) { %>
+                                    <img src="<%= course.thumbnail %>" alt="<%= course.title %>" />
+                                <% } else { %>
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                <% } %>
+                            </div>
+                            <div class="course-content">
+                                <h3 class="course-title"><%= course.title || 'Untitled Course' %></h3>
+                                <p class="course-description">
+                                    <%= course.description ? (course.description.length > 80 ? course.description.substring(0, 80) + '...' : course.description) : 'No description available' %>
+                                </p>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-users"></i> <%= Array.isArray(course.students) ? course.students.length : 0 %> students</span>
+                                    <span><i class="fas fa-file-alt"></i> <%= Array.isArray(course.materials) ? course.materials.length : 0 %> materials</span>
+                                </div>
+                                <div class="course-action">
+                                    <a href="/courses/<%= course._id %>" class="course-btn">Manage Course</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <i class="fas fa-chalkboard"></i>
+                    <h3>No courses created yet</h3>
+                    <p>Share your knowledge with the world by creating your first course.</p>
+                    <a href="/courses/new" class="btn btn-primary">Create Course</a>
+                </div>
+            <% } %>
+        <% } %>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+       $(document).ready(function() {
+    // Create particles
+    function createParticles() {
+        const container = document.getElementById('particles');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size between 10px and 40px
+            const size = Math.random() * 30 + 10;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            
+            // Random animation duration between 15s and 40s
+            const duration = Math.random() * 25 + 15;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Random animation delay
+            const delay = Math.random() * 10;
+            particle.style.animationDelay = `${delay}s`;
+            
+            container.appendChild(particle);
+        }
+    }
+    
+    // Initialize particles
+    createParticles();
+    
+    // Floating cards effect on scroll
+    $(window).scroll(function() {
+        const scrollTop = $(window).scrollTop();
+        
+        $('.floating-card').each(function() {
+            const floatType = parseInt($(this).data('float'));
+            let movement = 0;
+            
+            switch (floatType) {
+                case 0:
+                    movement = Math.sin(scrollTop / 500) * 10;
+                    break;
+                case 1:
+                    movement = Math.cos(scrollTop / 500) * 8;
+                    break;
+                case 2:
+                    movement = Math.sin(scrollTop / 700) * 6;
+                    break;
+            }
+            
+            $(this).css('transform', `translateY(${movement}px)`);
+        });
+    });
+    
+    // Initialize course progress bars with animation
+    $('.progress-bar').each(function() {
+        const width = $(this).css('width');
+        $(this).css('width', '0%');
+        
+        setTimeout(() => {
+            $(this).css('width', width);
+        }, 300);
+    });
+    
+    // Add hover effect to course cards
+    $('.course-card').hover(
+        function() {
+            $(this).addClass('animate__animated animate__pulse');
+        },
+        function() {
+            $(this).removeClass('animate__animated animate__pulse');
+        }
+    );
+});
+    </script>   
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    </body>
+    </html>
