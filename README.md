@@ -12,9 +12,9 @@ Skill Verse is a comprehensive platform designed to help users discover, manage,
 
 ## Technologies Used
 
-- **Languages:** (Add the languages used, e.g., Python, JavaScript, etc.)
-- **Frameworks & Libraries:** (List major frameworks/libraries, e.g., React, Django, etc.)
-- **Database:** (Specify if a database is used, e.g., PostgreSQL, MongoDB, etc.)
+- **Languages:** , HTML , CSS , JS
+- **Frameworks & Libraries:** Nodejs, ExpressJS 
+- **Database:**  MongoDB
 
 ## Getting Started
 
