@@ -59,12 +59,6 @@ Contributions are welcome! Please follow these steps:
 3. Commit your changes.
 4. Submit a pull request.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Contact
 
 For any inquiries or support, please open an issue or contact the repository owner.
